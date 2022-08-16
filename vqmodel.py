@@ -29,6 +29,11 @@ def Normalize(in_channels):
     return nn.GroupNorm(num_groups=32, num_channels=in_channels, eps=1e-6, affine=True)
 
 
+class DummyLoss(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+
 class Upsample(nn.Module):
     def __init__(self, in_channels, with_conv):
         super().__init__()
@@ -408,8 +413,6 @@ class Decoder(nn.Module):
         h = nonlinearity(h)
         h = self.conv_out(h)
         return h
-
-
 
 
 class VQModel(nn.Module):
