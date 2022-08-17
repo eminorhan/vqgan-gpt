@@ -11,8 +11,8 @@ from gptmodel import GPT, GPTConfig
 
 parser = argparse.ArgumentParser(description='Train a GPT on VQGAN encoded images')
 parser.add_argument('--data_path', default="/scratch/eo41/data/saycam/SAY_5fps_300s_{000000..000009}.tar", type=str, help='data path')
-parser.add_argument('--config_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.yaml", type=str, help='vq config path')
-parser.add_argument('--model_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.ckpt", type=str, help=' vq model path')
+parser.add_argument('--vqconfig_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.yaml", type=str, help='vq config path')
+parser.add_argument('--vqmodel_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.ckpt", type=str, help=' vq model path')
 parser.add_argument('--num_workers', default=4, type=int, help='number of data loading workers (default: 4)')
 parser.add_argument('--seed', default=1, type=int, help='random seed')
 parser.add_argument('--save_dir', default='', type=str, help='model save directory')

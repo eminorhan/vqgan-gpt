@@ -1,10 +1,10 @@
 #!/bin/bash
 
-##SBATCH --account=cds
+#SBATCH --account=cds
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=2
-#SBATCH --gres=gpu:a100:2
-#SBATCH --cpus-per-task=2
+#SBATCH --gres=gpu:rtx8000:2
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=300GB
 #SBATCH --time=02:00:00
 #SBATCH --array=0

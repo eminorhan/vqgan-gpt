@@ -25,6 +25,16 @@ class GPTConfig:
         for k,v in kwargs.items():
             setattr(self, k, v)
 
+class MeanLayer(torch.nn.Module):
+    def __init__(self, dim, keepdim=False):
+        super(MeanLayer, self).__init__()
+        self.dim = dim
+        self.keepdim = keepdim
+
+    def forward(self, x):
+        out = torch.mean(x, self.dim, self.keepdim)
+        return out
+
 class CausalSelfAttention(nn.Module):
     """
     A vanilla multi-head masked self-attention layer with a projection at the end.
@@ -50,7 +60,8 @@ class CausalSelfAttention(nn.Module):
         self.proj = nn.Linear(config.n_embd, config.n_embd)
         
         # causal mask to ensure that attention is only applied to the left in the input sequence
-        self.register_buffer("mask", torch.tril(torch.ones(config.block_size, config.block_size)).view(1, 1, config.block_size, config.block_size))
+        self.register_buffer("mask", torch.tril(torch.ones(config.block_size, config.block_size))
+                                     .view(1, 1, config.block_size, config.block_size))
         self.n_head = config.n_head
 
     def forward(self, x, layer_past=None):
@@ -63,7 +74,7 @@ class CausalSelfAttention(nn.Module):
 
         # causal self-attention; Self-attend: (B, nh, T, hs) x (B, nh, hs, T) -> (B, nh, T, T)
         att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))
-        att = att.masked_fill(self.mask[:, :, :T, :T] == 0, float('-inf'))
+        att = att.masked_fill(self.mask[:,:,:T,:T] == 0, float('-inf'))
         att = F.softmax(att, dim=-1)
         att = self.attn_drop(att)
         y = att @ v # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
@@ -89,13 +100,9 @@ class Block(nn.Module):
         )
 
     def forward(self, x):
-        # if input is from another Block object, just isolate the first
-        if isinstance(x, list):
-            x = x[0]
         x = x + self.attn(self.ln1(x))
-        a = self.ln2(x)
-        z = z + self.mlp(a)
-        return z, a
+        x = x + self.mlp(self.ln2(x))
+        return x
 
 class GPT(nn.Module):
     """  the full GPT language model, with a context size of block_size """
@@ -141,8 +148,7 @@ class GPT(nn.Module):
         position_embeddings = self.pos_emb[:, :t, :] # each position maps to a (learnable) vector
 
         x = self.drop(token_embeddings + position_embeddings)
-        x, a = self.blocks(x)  # a is the activations for cache
-        print('Shape of activations:', a.shape)
+        x = self.blocks(x)
         x = self.ln_f(x)
         logits = self.head(x)
 
@@ -150,7 +156,7 @@ class GPT(nn.Module):
         loss = None
         unreduced_loss = None
         if targets is not None:
-            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
+            loss = F.cross_entropy(logits.contiguous().view(-1, logits.size(-1)), targets.contiguous().view(-1))
             unreduced_loss = F.cross_entropy(logits.permute(0, 2, 1), targets, reduce=False)
             unreduced_loss = unreduced_loss.mean(-1)  # average over pixels
 
