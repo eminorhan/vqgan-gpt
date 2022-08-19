@@ -33,7 +33,7 @@ def preprocess_vqgan(x):
     x = 2.*x - 1.
     return x
 
-def save_checkpoint(model, train_loss, it, model_name, save_dir):
+def save_checkpoint(model, optimizer, train_loss, it, model_name, save_dir):
     # DataParallel wrappers keep raw model object in .module attribute
     raw_model = model.module if hasattr(model, "module") else model
     
@@ -41,4 +41,7 @@ def save_checkpoint(model, train_loss, it, model_name, save_dir):
     save_str = 'model_{}_{}'.format(it, model_name)
     save_path = os.path.join(save_dir, save_str)
     print('Saving model to:', save_path)
-    torch.save({'model_state_dict': raw_model.state_dict(), 'train_loss': train_loss}, save_path)
+    torch.save({'model_state_dict': raw_model.state_dict(), 
+                'optimizer_state_dict': optimizer.state_dict(), 
+                'train_loss': train_loss
+                }, save_path)

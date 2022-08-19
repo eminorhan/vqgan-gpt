@@ -92,7 +92,8 @@ optimizer = torch.optim.__dict__[args.optimizer](model.parameters(), args.lr, we
 if os.path.isfile(args.resume):
     checkpoint = torch.load(args.resume)
     model.module.load_state_dict(checkpoint['model_state_dict'])
-    print("=> loaded model weights at checkpoint '{}'".format(args.resume))
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    print("=> loaded model weights and optimizer state at checkpoint '{}'".format(args.resume))
     del checkpoint
     torch.cuda.empty_cache()
 else:
@@ -123,8 +124,8 @@ for it, images in enumerate(data_loader):
         # save trained model, clusters, and final train loss
         if args.distributed:
             if args.rank == 0:
-                save_checkpoint(model, train_loss, it, model_name, args.save_dir)
+                save_checkpoint(model, optimizer, train_loss, it, model_name, args.save_dir)
         else:
-            save_checkpoint(model, train_loss, it, model_name, args.save_dir)
+            save_checkpoint(model, optimizer, train_loss, it, model_name, args.save_dir)
 
         losses = []

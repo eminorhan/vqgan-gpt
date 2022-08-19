@@ -59,7 +59,7 @@ def generate_samples(model, vocab_size, n_samples):
         start_pixel = start_pixel.cuda()
 
     print('Starting sampling.')    
-    pixels = sample(model, start_pixel, model.get_block_size(), temperature=0.9, sample=True, top_k=128)
+    pixels = sample(model, start_pixel, model.get_block_size(), temperature=0.996, sample=True, top_k=128)
 
     return pixels
 
