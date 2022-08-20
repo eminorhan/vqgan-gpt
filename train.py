@@ -22,7 +22,7 @@ parser.add_argument('--n_embd', default=1024, type=int, help='embedding dimensio
 parser.add_argument('--vocab_size', default=8192, type=int, help='vocabulary size')
 parser.add_argument('--block_size', default=1023, type=int, help='context size')
 parser.add_argument('--batch_size', default=32, type=int, help='batch size per gpu')
-parser.add_argument('--print_freq', default=100, type=int, help='print after x iterations')
+parser.add_argument('--print_freq', default=5000, type=int, help='print after x iterations')
 parser.add_argument('--lr', default=0.0005, type=float, help='learning rate')
 parser.add_argument('--optimizer', default='Adam', choices=['Adam', 'SGD', 'ASGD'], help='optimizer')
 parser.add_argument('--resume', default='', type=str, help='Model path for resuming training')
@@ -62,6 +62,7 @@ if args.distributed:
 # load vqgan model to encode images
 vq_config = load_config(args.vqconfig_path, display=True)
 vq_model = load_vqgan(vq_config, ckpt_path=args.vqmodel_path)
+vq_model = vq_model.cuda(args.gpu)
 
 # data pipeline
 transform = Compose([RandomResizedCrop(256, scale=(0.4, 1), ratio=(1, 1)), ToTensor()])
@@ -103,11 +104,11 @@ else:
 model.train()
 losses = []
 for it, images in enumerate(data_loader):
-    images = preprocess_vqgan(images)
-    _, _, [_, _, indices] = vq_model.encode(images)
-    indices = indices.reshape(args.batch_size, -1)
-    indices = indices.cuda()
-
+    with torch.no_grad():
+        images = preprocess_vqgan(images.cuda(args.gpu))
+        _, _, [_, _, indices] = vq_model.encode(images)
+        indices = indices.reshape(args.batch_size, -1)
+        
     # forward prop
     _, loss, _ = model(indices[:, :-1], indices[:, 1:])  # first output returns logits, last one returns unreduced losses
     losses.append(loss.item())

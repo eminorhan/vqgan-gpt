@@ -6,7 +6,7 @@
 #SBATCH --gres=gpu:a100:4
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=492GB
-#SBATCH --time=12:00:00
+#SBATCH --time=48:00:00
 #SBATCH --array=0
 #SBATCH --job-name=train_gpt
 #SBATCH --output=train_gpt_%A_%a.out
@@ -22,6 +22,6 @@ module load cuda/11.3.1
 LR=0.0005
 OPTIMIZER='Adam'
 
-srun python -u /scratch/eo41/vqgan-gpt/train.py --save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' --batch_size 24 --optimizer $OPTIMIZER --lr $LR --seed $SLURM_ARRAY_TASK_ID --n_layer 24 --n_head 8 --n_emb 512 --resume "/scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_2200_24l_8h_512e_96b_0.0005lr_Adamo_0s.pt"
+srun python -u /scratch/eo41/vqgan-gpt/train.py --save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' --batch_size 30 --optimizer $OPTIMIZER --lr $LR --seed $SLURM_ARRAY_TASK_ID --n_layer 24 --n_head 8 --n_emb 512 --num_workers 4 --resume ""
 
 echo "Done"

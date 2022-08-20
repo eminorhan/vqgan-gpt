@@ -66,7 +66,7 @@ def generate_samples(model, vocab_size, n_samples):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Generate samples from a checkpointed GPT')
-    parser.add_argument('--model_cache', default="/scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_2200_24l_8h_512e_96b_0.0005lr_Adamo_0s.pt", type=str, help='Cache path for the GPT model')
+    parser.add_argument('--model_cache', default="/scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_3200_24l_8h_512e_96b_0.0005lr_Adamo_0s.pt", type=str, help='Cache path for the GPT model')
     parser.add_argument('--vqconfig_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.yaml", type=str, help='vq config path')
     parser.add_argument('--vqmodel_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.ckpt", type=str, help=' vq model path')
     parser.add_argument('--n_samples', default=16, type=int, help='number of samples to generate')
