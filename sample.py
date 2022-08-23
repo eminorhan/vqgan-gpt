@@ -98,7 +98,7 @@ if __name__ == "__main__":
 
     # load the model
     print("Loading model")
-    model_ckpt = torch.load(os.path.join(args.gpt_dir, args.gpt_model, '.pt'))
+    model_ckpt = torch.load(os.path.join(args.gpt_dir, args.gpt_model + '.pt'))
     model.load_state_dict(model_ckpt['model_state_dict'])
 
     if torch.cuda.is_available():

@@ -85,3 +85,5 @@ Number of parameters: 2452850688
   warnings.warn(warning.format(ret))
 Iteration: 0 | Training loss: 9.343347549438477
 Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_0_48l_16h_2048e_32b_0.0001lr_Adamo_0s.pt
+Iteration: 5000 | Training loss: 6.334113958501816
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_5000_48l_16h_2048e_32b_0.0001lr_Adamo_0s.pt
