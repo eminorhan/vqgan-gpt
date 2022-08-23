@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##SBATCH --account=cds
-#SBATCH --nodes=1
+#SBATCH --nodes=4
 #SBATCH --ntasks-per-node=4
 #SBATCH --gres=gpu:a100:4
 #SBATCH --cpus-per-task=8
@@ -14,14 +14,14 @@
 ### change WORLD_SIZE as gpus/node * num_nodes
 export MASTER_ADDR=$(hostname -s)
 export MASTER_PORT=$(shuf -i 10000-65500 -n 1)
-export WORLD_SIZE=4
+export WORLD_SIZE=16
 
 module purge
 module load cuda/11.3.1
 
-LR=0.0005
+LR=0.0001
 OPTIMIZER='Adam'
 
-srun python -u /scratch/eo41/vqgan-gpt/train.py --save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' --batch_size 30 --optimizer $OPTIMIZER --lr $LR --seed $SLURM_ARRAY_TASK_ID --n_layer 24 --n_head 8 --n_emb 512 --num_workers 4 --resume ""
+srun python -u /scratch/eo41/vqgan-gpt/train.py --save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' --batch_size 2 --optimizer $OPTIMIZER --lr $LR --seed $SLURM_ARRAY_TASK_ID --n_layer 48 --n_head 16 --n_emb 2048 --num_workers 8 --resume ""
 
 echo "Done"

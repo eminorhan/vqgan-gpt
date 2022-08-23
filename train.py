@@ -5,7 +5,7 @@ import torch
 import webdataset as wds
 import torch.distributed as dist
 import numpy as np
-from torchvision.transforms import Compose, RandomResizedCrop, ToTensor
+from torchvision.transforms import Compose, Resize, RandomCrop, RandomResizedCrop, ToTensor
 from utils import set_seed, load_config, load_vqgan, preprocess, preprocess_vqgan, save_checkpoint
 from gptmodel import GPT, GPTConfig
 
@@ -65,7 +65,8 @@ vq_model = load_vqgan(vq_config, ckpt_path=args.vqmodel_path)
 vq_model = vq_model.cuda(args.gpu)
 
 # data pipeline
-transform = Compose([RandomResizedCrop(256, scale=(0.4, 1), ratio=(1, 1)), ToTensor()])
+# transform = Compose([RandomResizedCrop(256, scale=(0.4, 1), ratio=(1, 1)), ToTensor()])
+transform = Compose([Resize(288), RandomCrop(256), ToTensor()])
 dataset = (wds.WebDataset(args.data_path, resampled=True).shuffle(10000).decode("pil").to_tuple("jpg").map(preprocess).map(transform))
 data_loader = wds.WebLoader(dataset, shuffle=False, batch_size=args.batch_size, num_workers=args.num_workers)
 

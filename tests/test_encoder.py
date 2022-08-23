@@ -68,7 +68,6 @@ if __name__ == "__main__":
 
     # data preprocessing
     transform = Compose([RandomResizedCrop(256, scale=(0.4, 1)), ToTensor()])
-
     dataset = (wds.WebDataset(args.data_path, resampled=True).shuffle(1000).decode("pil").to_tuple("jpg").map(preprocess).map(transform))
     data_loader = wds.WebLoader(dataset, shuffle=False, batch_size=args.batch_size_per_gpu, num_workers=args.num_workers)
 
