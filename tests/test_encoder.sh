@@ -12,6 +12,6 @@
 module purge
 module load cuda/11.3.1
 
-python -u /scratch/eo41/vqgan-gpt/test_encoder.py 
+python -u /scratch/eo41/vqgan-gpt/tests/test_encoder.py 
 
 echo "Done"

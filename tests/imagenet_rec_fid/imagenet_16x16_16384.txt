@@ -1,0 +1,1 @@
+{'inception_score_mean': 144.6031421749752, 'inception_score_std': 7.244250060230918, 'frechet_inception_distance': 7.613801012691397}

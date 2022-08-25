@@ -323,6 +323,11 @@ class vgg16(torch.nn.Module):
         return out
 
 
+class DummyLoss(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+
 class VQLPIPSWithDiscriminator(nn.Module):
     def __init__(self, disc_start, codebook_weight=1.0, pixelloss_weight=1.0, disc_num_layers=3, disc_in_channels=3, disc_factor=1.0, disc_weight=1.0, perceptual_weight=1.0, use_actnorm=False, disc_conditional=False, disc_ndf=64, disc_loss="hinge"):
         super().__init__()

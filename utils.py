@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import yaml
 from omegaconf import OmegaConf
-from vqmodel import VQModel
+from vqmodel import VQModel, GumbelVQ
 
 
 def load_config(config_path, display=False):
@@ -13,8 +13,12 @@ def load_config(config_path, display=False):
         print(yaml.dump(OmegaConf.to_container(config)))
         return config
 
-def load_vqgan(config, ckpt_path=None):
-    model = VQModel(**config.model.params)
+def load_vqgan(config, ckpt_path=None, gumbel=False):
+    if gumbel:
+        model = GumbelVQ(**config.model.params)
+    else:
+        model = VQModel(**config.model.params)
+        
     if ckpt_path is not None:
         sd = torch.load(ckpt_path, map_location="cpu")["state_dict"]
         missing, unexpected = model.load_state_dict(sd, strict=False)

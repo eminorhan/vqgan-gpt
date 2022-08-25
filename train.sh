@@ -19,9 +19,9 @@ export WORLD_SIZE=16
 module purge
 module load cuda/11.3.1
 
-LR=0.0001
+LR=0.0005
 OPTIMIZER='Adam'
 
-srun python -u /scratch/eo41/vqgan-gpt/train.py --save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' --batch_size 2 --optimizer $OPTIMIZER --lr $LR --seed $SLURM_ARRAY_TASK_ID --n_layer 48 --n_head 16 --n_emb 2048 --num_workers 8 --resume ""
+srun python -u /scratch/eo41/vqgan-gpt/train.py --save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' --batch_size 4 --optimizer $OPTIMIZER --lr $LR --seed $SLURM_ARRAY_TASK_ID --n_layer 48 --n_head 16 --n_emb 1600 --num_workers 8 --resume ""
 
 echo "Done"

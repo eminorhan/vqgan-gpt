@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "/scratch/eo41/vqgan-gpt/tests/test_encoder.py", line 7, in <module>
-    from vqmodel import VQModel
-ModuleNotFoundError: No module named 'vqmodel'
-Done

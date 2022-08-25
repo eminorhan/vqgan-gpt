@@ -1,0 +1,30 @@
+model:
+  base_learning_rate: 1.0e-05
+  target: vqmodel.VQModel
+  params:
+    embed_dim: 256
+    n_embed: 8192
+    ddconfig:
+      double_z: false
+      z_channels: 256
+      resolution: 256
+      in_channels: 3
+      out_ch: 3
+      ch: 128
+      ch_mult:
+      - 1
+      - 1
+      - 2
+      - 4
+      num_res_blocks: 2
+      attn_resolutions:
+      - 32
+      dropout: 0.0
+    lossconfig:
+      target: vqloss.VQLPIPSWithDiscriminator
+      params:
+        disc_conditional: false
+        disc_in_channels: 3
+        disc_start: 100001
+        disc_weight: 0.2
+        codebook_weight: 1.0
