@@ -1,3 +1,4 @@
+import sys
 import argparse
 import torch
 import webdataset as wds
@@ -5,7 +6,8 @@ import numpy as np
 from torchvision.transforms import Compose, RandomResizedCrop, ToTensor
 from PIL import Image, ImageDraw
 
-from ..utils import load_config, load_vqgan, preprocess, preprocess_vqgan
+sys.path.insert(0, '/scratch/eo41/vqgan-gpt')
+from utils import load_config, load_vqgan, preprocess, preprocess_vqgan
 
 def custom_to_pil(x):
   x = x.detach().cpu()
