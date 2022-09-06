@@ -95,6 +95,7 @@ if os.path.isfile(args.resume):
     checkpoint = torch.load(args.resume)
     model.module.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    optimizer.lr = 0.0001
     print("=> loaded model weights and optimizer state at checkpoint '{}'".format(args.resume))
     del checkpoint
     torch.cuda.empty_cache()
