@@ -15,15 +15,39 @@ from torch.nn import functional as F
 
 class GPTConfig:
     """ base GPT config, params common to all GPT versions """
-    embd_pdrop = 0.1
-    resid_pdrop = 0.1
-    attn_pdrop = 0.1
+    embd_pdrop = 0.0
+    resid_pdrop = 0.0
+    attn_pdrop = 0.0
 
     def __init__(self, vocab_size, block_size, **kwargs):
         self.vocab_size = vocab_size
         self.block_size = block_size
         for k,v in kwargs.items():
             setattr(self, k, v)
+
+class GPTAlpha(GPTConfig):
+    """ Roughly 85M params """
+    n_layer = 24
+    n_head = 8
+    n_embd = 512
+
+class GPTBeta(GPTConfig):
+    """ Roughly 269M params """
+    n_layer = 36
+    n_head = 12
+    n_embd = 768
+
+class GPTGamma(GPTConfig):
+    """ Roughly 457M params """
+    n_layer = 36
+    n_head = 12
+    n_embd = 1008
+
+class GPTDelta(GPTConfig):
+    """ Roughly 1.5B params """
+    n_layer = 48
+    n_head = 16
+    n_embd = 1600
 
 class MeanLayer(torch.nn.Module):
     def __init__(self, dim, keepdim=False):

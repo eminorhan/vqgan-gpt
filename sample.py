@@ -2,7 +2,7 @@ import os
 import argparse
 import torch
 import numpy as np
-from gptmodel import GPT, GPTConfig
+import gptmodel
 from torch.nn import functional as F
 from utils import load_config, load_vqgan
 from torchvision.utils import save_image
@@ -80,21 +80,21 @@ def generate_samples_from_half(model, x, n_samples):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Generate samples from a checkpointed GPT')
-    parser.add_argument('--gpt_dir', default="/scratch/eo41/vqgan-gpt/gpt_pretrained_models", type=str, help='Directory storing the GPT model')
-    parser.add_argument('--gpt_model', default="model_155000_36l_12h_1008e_88b_0.0005lr_Adamo_0s", type=str, help='Full name of the GPT model')
-    parser.add_argument('--vqconfig_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.yaml", type=str, help='vq config path')
-    parser.add_argument('--vqmodel_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.ckpt", type=str, help=' vq model path')
+    parser.add_argument('--gpt_dir', default='/scratch/eo41/vqgan-gpt/gpt_pretrained_models', type=str, help='Directory storing the GPT model')
+    parser.add_argument('--gpt_model', default='model_150000_36l_12h_768e_192b_0.0005lr_Adamo_0s', type=str, help='Full name of the GPT model')
+    parser.add_argument('--gpt_config', default='GPTBeta', type=str, help='name of GPT config')
+    parser.add_argument('--vqconfig_path', default='/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.yaml', type=str, help='vq config path')
+    parser.add_argument('--vqmodel_path', default='/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.ckpt', type=str, help=' vq model path')
     parser.add_argument('--n_samples', default=6, type=int, help='number of samples to generate')
-    parser.add_argument('--data_path', default="/scratch/eo41/data/saycam/SAY_5fps_300s_{000000..000009}.tar", type=str, help='data path')
+    parser.add_argument('--data_path', default='/scratch/eo41/data/saycam/SAY_5fps_300s_{000000..000009}.tar', type=str, help='data path')
     parser.add_argument('--condition', default='free', type=str, help='Generation condition', choices=['free', 'cond'])
     parser.add_argument('--n_imgs', default=5, type=int, help='number of images')
 
     args = parser.parse_args()
     print(args)
-
-    ## set up model (TODO: better way to handle the model config)
-    mconf = GPTConfig(8192, 1023, embd_pdrop=0.0, resid_pdrop=0.0, attn_pdrop=0.0, n_layer=36, n_head=12, n_embd=1008)
-    model = GPT(mconf)
+    
+    mconf = gptmodel.__dict__[args.gpt_config](8192, 1023)
+    model = gptmodel.GPT(mconf)
 
     # load the model
     print("Loading model")
@@ -123,7 +123,7 @@ if __name__ == "__main__":
         # data preprocessing
         # transform = Compose([RandomResizedCrop(256, scale=(0.4, 1)), ToTensor()])
         transform = Compose([Resize(288), RandomCrop(256), ToTensor()])
-        dataset = (wds.WebDataset(args.data_path, resampled=True).shuffle(1000).decode("pil").to_tuple("jpg").map(preprocess).map(transform))
+        dataset = (wds.WebDataset(args.data_path, resampled=True).shuffle(10000, initial=10000).decode("pil").to_tuple("jpg").map(preprocess).map(transform))
         data_loader = wds.WebLoader(dataset, shuffle=False, batch_size=args.n_imgs, num_workers=4)
 
         for it, images in enumerate(data_loader):

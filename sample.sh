@@ -12,7 +12,9 @@
 module purge
 module load cuda/11.3.1
 
-# python -u /scratch/eo41/vqgan-gpt/sample.py --condition "free"
-python -u /scratch/eo41/vqgan-gpt/sample.py --condition "cond"
+python -u /scratch/eo41/vqgan-gpt/sample.py \
+	--condition "cond" \
+	--gpt_config "GPTBeta" \
+	--gpt_model "model_150000_36l_12h_768e_192b_0.0005lr_Adamo_0s"
 
 echo "Done"
