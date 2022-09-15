@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import gptmodel
 from torch.nn import functional as F
-from utils import load_config, load_vqgan
+from utils import load_config, load_vqgan, set_seed
 from torchvision.utils import save_image
 
 
@@ -81,18 +81,22 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Generate samples from a checkpointed GPT')
     parser.add_argument('--gpt_dir', default='/scratch/eo41/vqgan-gpt/gpt_pretrained_models', type=str, help='Directory storing the GPT model')
-    parser.add_argument('--gpt_model', default='model_150000_36l_12h_768e_192b_0.0005lr_Adamo_0s', type=str, help='Full name of the GPT model')
-    parser.add_argument('--gpt_config', default='GPTBeta', type=str, help='name of GPT config')
+    parser.add_argument('--gpt_model', default='', type=str, help='Full name of the GPT model')
+    parser.add_argument('--gpt_config', default='GPT_gimel', type=str, help='name of GPT config', choices=['GPT_alef', 'GPT_bet', 'GPT_gimel', 'GPT_dalet'])
     parser.add_argument('--vqconfig_path', default='/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.yaml', type=str, help='vq config path')
     parser.add_argument('--vqmodel_path', default='/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.ckpt', type=str, help=' vq model path')
     parser.add_argument('--n_samples', default=6, type=int, help='number of samples to generate')
     parser.add_argument('--data_path', default='/scratch/eo41/data/saycam/SAY_5fps_300s_{000000..000009}.tar', type=str, help='data path')
     parser.add_argument('--condition', default='free', type=str, help='Generation condition', choices=['free', 'cond'])
     parser.add_argument('--n_imgs', default=5, type=int, help='number of images')
+    parser.add_argument('--seed', default=1, type=int, help='random seed')
 
     args = parser.parse_args()
     print(args)
     
+    # set random seed
+    set_seed(args.seed)
+
     mconf = gptmodel.__dict__[args.gpt_config](8192, 1023)
     model = gptmodel.GPT(mconf)
 
@@ -117,11 +121,10 @@ if __name__ == "__main__":
         n_totsamples = args.n_samples
     else:
         import webdataset as wds
-        from torchvision.transforms import Compose, Resize, RandomCrop, RandomResizedCrop, ToTensor
+        from torchvision.transforms import Compose, Resize, RandomCrop, ToTensor
         from utils import preprocess, preprocess_vqgan
 
         # data preprocessing
-        # transform = Compose([RandomResizedCrop(256, scale=(0.4, 1)), ToTensor()])
         transform = Compose([Resize(288), RandomCrop(256), ToTensor()])
         dataset = (wds.WebDataset(args.data_path, resampled=True).shuffle(10000, initial=10000).decode("pil").to_tuple("jpg").map(preprocess).map(transform))
         data_loader = wds.WebLoader(dataset, shuffle=False, batch_size=args.n_imgs, num_workers=4)
@@ -150,4 +153,4 @@ if __name__ == "__main__":
     if args.condition == "cond":
         xmodel[:, :, 126, :] = 1
 
-    save_image(xmodel, "{}_{}.pdf".format(args.condition, args.gpt_model), nrow=5, padding=1, normalize=True)
+    save_image(xmodel, "{}_{}_{}.pdf".format(args.condition, args.gpt_model, args.seed), nrow=5, padding=1, normalize=True)

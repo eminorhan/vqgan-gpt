@@ -103,3 +103,26 @@ Iteration: 130000 | Training loss: 5.435026389789582
 Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_130000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
 Iteration: 135000 | Training loss: 5.43241833410263
 Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_135000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 140000 | Training loss: 5.4298383046150205
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_140000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 145000 | Training loss: 5.426761060523987
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_145000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 150000 | Training loss: 5.426377611064911
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_150000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 155000 | Training loss: 5.422225729560852
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_155000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 160000 | Training loss: 5.420503120040894
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_160000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 165000 | Training loss: 5.4156047637939455
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_165000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 170000 | Training loss: 5.414139338779449
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_170000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 175000 | Training loss: 5.414591488552094
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_175000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 180000 | Training loss: 5.413368737983704
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_180000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+Iteration: 185000 | Training loss: 5.411497546863556
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_185000_12l_12h_768e_144b_0.0003lr_Adamo_0s.pt
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 24567704 ON ga005 CANCELLED AT 2022-09-09T01:19:28 ***
+slurmstepd: error: *** STEP 24567704.0 ON ga005 CANCELLED AT 2022-09-09T01:19:28 ***

@@ -16,7 +16,7 @@ parser.add_argument('--vqmodel_path', default="/scratch/eo41/vqgan-gpt/vqgan_pre
 parser.add_argument('--num_workers', default=8, type=int, help='number of data loading workers (default: 4)')
 parser.add_argument('--seed', default=1, type=int, help='random seed')
 parser.add_argument('--save_dir', default='', type=str, help='model save directory')
-parser.add_argument('--gpt_config', default='GPTBeta', type=str, help='name of GPT config')
+parser.add_argument('--gpt_config', default='GPT_bet', type=str, help='name of GPT config', choices=['GPT_alef', 'GPT_bet', 'GPT_gimel', 'GPT_dalet'])
 parser.add_argument('--vocab_size', default=8192, type=int, help='vocabulary size')
 parser.add_argument('--block_size', default=1023, type=int, help='context size')
 parser.add_argument('--batch_size', default=32, type=int, help='batch size per gpu')

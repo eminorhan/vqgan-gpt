@@ -25,28 +25,28 @@ class GPTConfig:
         for k,v in kwargs.items():
             setattr(self, k, v)
 
-class GPTAlpha(GPTConfig):
-    """ Roughly 85M params """
+class GPT_alef(GPTConfig):
+    """ Roughly ??M params """
+    n_layer = 12
+    n_head = 12
+    n_embd = 786
+
+class GPT_bet(GPTConfig):
+    """ Roughly ??M params """
     n_layer = 24
-    n_head = 8
-    n_embd = 512
-
-class GPTBeta(GPTConfig):
-    """ Roughly 269M params """
-    n_layer = 36
-    n_head = 12
-    n_embd = 768
-
-class GPTGamma(GPTConfig):
-    """ Roughly 457M params """
-    n_layer = 36
-    n_head = 12
-    n_embd = 1008
-
-class GPTDelta(GPTConfig):
-    """ Roughly 1.5B params """
-    n_layer = 48
     n_head = 16
+    n_embd = 1024
+
+class GPT_gimel(GPTConfig):
+    """ Roughly ??M params """
+    n_layer = 36
+    n_head = 20
+    n_embd = 1280
+
+class GPT_dalet(GPTConfig):
+    """ Roughly ??M params """
+    n_layer = 48
+    n_head = 25
     n_embd = 1600
 
 class MeanLayer(torch.nn.Module):
@@ -84,8 +84,7 @@ class CausalSelfAttention(nn.Module):
         self.proj = nn.Linear(config.n_embd, config.n_embd)
         
         # causal mask to ensure that attention is only applied to the left in the input sequence
-        self.register_buffer("mask", torch.tril(torch.ones(config.block_size, config.block_size))
-                                     .view(1, 1, config.block_size, config.block_size))
+        self.register_buffer("mask", torch.tril(torch.ones(config.block_size, config.block_size)).view(1, 1, config.block_size, config.block_size))
         self.n_head = config.n_head
 
     def forward(self, x, layer_past=None):
@@ -98,7 +97,7 @@ class CausalSelfAttention(nn.Module):
 
         # causal self-attention; Self-attend: (B, nh, T, hs) x (B, nh, hs, T) -> (B, nh, T, T)
         att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))
-        att = att.masked_fill(self.mask[:,:,:T,:T] == 0, float('-inf'))
+        att = att.masked_fill(self.mask[:, :, :T, :T] == 0, float('-inf'))
         att = F.softmax(att, dim=-1)
         att = self.attn_drop(att)
         y = att @ v # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
