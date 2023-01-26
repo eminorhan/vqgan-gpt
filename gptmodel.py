@@ -29,7 +29,7 @@ class GPT_alef(GPTConfig):
     """ Roughly ??M params """
     n_layer = 12
     n_head = 12
-    n_embd = 786
+    n_embd = 768
 
 class GPT_bet(GPTConfig):
     """ Roughly ??M params """
@@ -167,8 +167,8 @@ class GPT(nn.Module):
         assert t <= self.block_size, "Cannot forward, model block size is exhausted."    
 
         # forward the GPT model
-        token_embeddings = self.tok_emb(idx) # each index maps to a (learnable) vector
-        position_embeddings = self.pos_emb[:, :t, :] # each position maps to a (learnable) vector
+        token_embeddings = self.tok_emb(idx)  # each index maps to a (learnable) vector
+        position_embeddings = self.pos_emb[:, :t, :]  # each position maps to a (learnable) vector
 
         x = self.drop(token_embeddings + position_embeddings)
         x = self.blocks(x)

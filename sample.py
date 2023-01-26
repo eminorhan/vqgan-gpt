@@ -153,4 +153,4 @@ if __name__ == "__main__":
     if args.condition == "cond":
         xmodel[:, :, 126, :] = 1
 
-    save_image(xmodel, "{}_{}_{}.pdf".format(args.condition, args.gpt_model, args.seed), nrow=5, padding=1, normalize=True)
+    save_image(xmodel, "{}_{}_{}.png".format(args.condition, args.gpt_model, args.seed), nrow=5, padding=1, normalize=True)

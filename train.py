@@ -6,7 +6,7 @@ import webdataset as wds
 import torch.distributed as dist
 import numpy as np
 import gptmodel
-from torchvision.transforms import Compose, Resize, RandomCrop, RandomResizedCrop, ToTensor
+from torchvision.transforms import Compose, Resize, RandomCrop, ToTensor
 from utils import set_seed, load_config, load_vqgan, preprocess, preprocess_vqgan, save_checkpoint
 
 parser = argparse.ArgumentParser(description='Train a GPT on VQGAN encoded images')
@@ -89,7 +89,7 @@ else:
 optimizer = torch.optim.__dict__[args.optimizer](model.parameters(), args.lr, weight_decay=0.0)
 
 if os.path.isfile(args.resume):
-    checkpoint = torch.load(args.resume)
+    checkpoint = torch.load(args.resume, map_location='cpu')
     model.module.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     print("=> loaded model weights and optimizer state at checkpoint '{}'".format(args.resume))
