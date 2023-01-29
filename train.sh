@@ -16,12 +16,12 @@ export MASTER_PORT=$(shuf -i 10000-65500 -n 1)
 export WORLD_SIZE=16
 
 module purge
-module load cuda/11.3.1
+module load cuda/11.6.2
 
 LR=0.0003
 OPTIMIZER='Adam'
 
-# # say
+# # ####################### SAY #######################
 # srun python -u /scratch/eo41/vqgan-gpt/train.py \
 # 	--save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' \
 # 	--batch_size 6 \
@@ -34,24 +34,10 @@ OPTIMIZER='Adam'
 # 	--data_path '/scratch/eo41/data/saycam/SAY_5fps_300s_{000000..000009}.tar' \
 # 	--vqconfig_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.yaml' \
 # 	--vqmodel_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.ckpt' \
-# 	--resume '/scratch/eo41/vqgan-gpt/gpt_pretrained_models/say_gimel.pt'
+# 	--resume '/scratch/eo41/vqgan-gpt/gpt_pretrained_models/say_gimel.pt' \
+# 	--save_prefix 'say_gimel'
 
-# s
-srun python -u /scratch/eo41/vqgan-gpt/train.py \
-	--save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' \
-	--batch_size 6 \
-	--gpt_config 'GPT_gimel' \
-	--num_workers 8 \
-	--print_freq 10000 \
-	--optimizer ${OPTIMIZER} \
-	--lr ${LR} \
-	--seed ${SLURM_ARRAY_TASK_ID} \
-	--data_path '/scratch/eo41/data/saycam/S_5fps_300s_{000000..000003}.tar' \
-	--vqconfig_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/s_32x32_8192.yaml' \
-	--vqmodel_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/s_32x32_8192.ckpt' \
-	--resume ''
-
-# # a
+# # ####################### SFP #######################
 # srun python -u /scratch/eo41/vqgan-gpt/train.py \
 # 	--save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' \
 # 	--batch_size 6 \
@@ -61,12 +47,29 @@ srun python -u /scratch/eo41/vqgan-gpt/train.py \
 # 	--optimizer ${OPTIMIZER} \
 # 	--lr ${LR} \
 # 	--seed ${SLURM_ARRAY_TASK_ID} \
-# 	--data_path '/scratch/eo41/data/saycam/A_5fps_300s_{000000..000002}.tar' \
-# 	--vqconfig_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/a_32x32_8192.yaml' \
-# 	--vqmodel_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/a_32x32_8192.ckpt' \
-# 	--resume ''
+# 	--data_path '/scratch/eo41/data/saycam/Sfp_5fps_300s_{000000..000003}.tar' \
+# 	--vqconfig_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/s_32x32_8192.yaml' \
+# 	--vqmodel_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/s_32x32_8192.ckpt' \
+# 	--resume '' \
+# 	--save_prefix 'sfp_gimel'
 
-# # y
+# # ####################### A #######################
+srun python -u /scratch/eo41/vqgan-gpt/train.py \
+	--save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' \
+	--batch_size 6 \
+	--gpt_config 'GPT_gimel' \
+	--num_workers 8 \
+	--print_freq 10000 \
+	--optimizer ${OPTIMIZER} \
+	--lr ${LR} \
+	--seed ${SLURM_ARRAY_TASK_ID} \
+	--data_path '/scratch/eo41/data/saycam/A_5fps_300s_{000000..000002}.tar' \
+	--vqconfig_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/a_32x32_8192.yaml' \
+	--vqmodel_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/a_32x32_8192.ckpt' \
+	--resume '' \
+    --save_prefix 'a_gimel'
+
+# # ####################### Y #######################
 # srun python -u /scratch/eo41/vqgan-gpt/train.py \
 # 	--save_dir '/scratch/eo41/vqgan-gpt/gpt_pretrained_models' \
 # 	--batch_size 6 \
@@ -79,6 +82,7 @@ srun python -u /scratch/eo41/vqgan-gpt/train.py \
 # 	--data_path '/scratch/eo41/data/saycam/Y_5fps_300s_{000000..000002}.tar' \
 # 	--vqconfig_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/y_32x32_8192.yaml' \
 # 	--vqmodel_path '/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/y_32x32_8192.ckpt' \
-# 	--resume ''
+# 	--resume '' \
+#   --save_prefix 'y_gimel'
 
 echo "Done"

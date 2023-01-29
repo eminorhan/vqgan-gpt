@@ -13,9 +13,10 @@ parser = argparse.ArgumentParser(description='Train a GPT on VQGAN encoded image
 parser.add_argument('--data_path', default="/scratch/eo41/data/saycam/SAY_5fps_300s_{000000..000009}.tar", type=str, help='data path')
 parser.add_argument('--vqconfig_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.yaml", type=str, help='vq config path')
 parser.add_argument('--vqmodel_path', default="/scratch/eo41/vqgan-gpt/vqgan_pretrained_models/say_32x32_8192.ckpt", type=str, help=' vq model path')
-parser.add_argument('--num_workers', default=8, type=int, help='number of data loading workers (default: 4)')
+parser.add_argument('--num_workers', default=8, type=int, help='number of data loading workers (default: 8)')
 parser.add_argument('--seed', default=1, type=int, help='random seed')
 parser.add_argument('--save_dir', default='', type=str, help='model save directory')
+parser.add_argument('--save_prefix', default='model', type=str, help='model save name')
 parser.add_argument('--gpt_config', default='GPT_bet', type=str, help='name of GPT config', choices=['GPT_alef', 'GPT_bet', 'GPT_gimel', 'GPT_dalet'])
 parser.add_argument('--vocab_size', default=8192, type=int, help='vocabulary size')
 parser.add_argument('--block_size', default=1023, type=int, help='context size')
@@ -72,7 +73,6 @@ mconf = gptmodel.__dict__[args.gpt_config](args.vocab_size, args.block_size)
 model = gptmodel.GPT(mconf)
 
 print('Running on {} GPUs total'.format(args.world_size))
-model_name = '{}l_{}h_{}e_{}b_{}lr_{}o_{}s.pt'.format(mconf.n_layer, mconf.n_head, mconf.n_embd, args.world_size * args.batch_size, args.lr, args.optimizer, args.seed)
 
 if args.distributed:
     # For multiprocessing distributed, DDP constructor should always set the single device scope
@@ -123,8 +123,8 @@ for it, images in enumerate(data_loader):
         # save trained model, clusters, and final train loss
         if args.distributed:
             if args.rank == 0:
-                save_checkpoint(model, optimizer, train_loss, it, model_name, args.save_dir)
+                save_checkpoint(model, optimizer, train_loss, it, args.save_prefix, args.save_dir)
         else:
-            save_checkpoint(model, optimizer, train_loss, it, model_name, args.save_dir)
+            save_checkpoint(model, optimizer, train_loss, it, args.save_prefix, args.save_dir)
 
         losses = []
