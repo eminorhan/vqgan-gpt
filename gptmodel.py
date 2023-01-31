@@ -38,13 +38,13 @@ class GPT_bet(GPTConfig):
     n_embd = 1024
 
 class GPT_gimel(GPTConfig):
-    """ Roughly ??M params """
+    """ Roughly 730M params """
     n_layer = 36
     n_head = 20
     n_embd = 1280
 
 class GPT_dalet(GPTConfig):
-    """ Roughly ??M params """
+    """ Roughly 1.5B params """
     n_layer = 48
     n_head = 25
     n_embd = 1600

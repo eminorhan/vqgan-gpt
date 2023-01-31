@@ -120,7 +120,7 @@ for it, images in enumerate(data_loader):
         train_loss = float(np.mean(losses))
         print('Iteration:', it, '|', 'Training loss:', train_loss)
 
-        # save trained model, clusters, and final train loss
+        # save trained model and loss
         if args.distributed:
             if args.rank == 0:
                 save_checkpoint(model, optimizer, train_loss, it, args.save_prefix, args.save_dir)

@@ -181,3 +181,20 @@ Running on 16 GPUs total
   warnings.warn(warning.format(ret))
 Iteration: 0 | Training loss: 9.250845909118652
 Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_0_36l_20h_1280e_96b_0.0003lr_Adamo_0s.pt
+Iteration: 10000 | Training loss: 5.809336846494674
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_10000_36l_20h_1280e_96b_0.0003lr_Adamo_0s.pt
+Iteration: 20000 | Training loss: 5.381569646072387
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_20000_36l_20h_1280e_96b_0.0003lr_Adamo_0s.pt
+Iteration: 30000 | Training loss: 5.244765582513809
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_30000_36l_20h_1280e_96b_0.0003lr_Adamo_0s.pt
+Iteration: 40000 | Training loss: 5.168160017490387
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_40000_36l_20h_1280e_96b_0.0003lr_Adamo_0s.pt
+Iteration: 50000 | Training loss: 5.114514644646644
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_50000_36l_20h_1280e_96b_0.0003lr_Adamo_0s.pt
+Iteration: 60000 | Training loss: 5.067785410428047
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_60000_36l_20h_1280e_96b_0.0003lr_Adamo_0s.pt
+Iteration: 70000 | Training loss: 5.025504623293877
+Saving model to: /scratch/eo41/vqgan-gpt/gpt_pretrained_models/model_70000_36l_20h_1280e_96b_0.0003lr_Adamo_0s.pt
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 29613439 ON ga016 CANCELLED AT 2023-01-31T07:27:35 ***
+slurmstepd: error: *** STEP 29613439.0 ON ga016 CANCELLED AT 2023-01-31T07:27:35 ***
