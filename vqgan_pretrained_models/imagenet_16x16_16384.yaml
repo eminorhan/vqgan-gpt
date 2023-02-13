@@ -31,4 +31,3 @@ model:
         disc_weight: 0.75
         disc_num_layers: 2
         codebook_weight: 1.0
-

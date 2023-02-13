@@ -105,13 +105,12 @@ if __name__ == "__main__":
     model_ckpt = torch.load(os.path.join(args.gpt_dir, args.gpt_model + '.pt'))
     model.load_state_dict(model_ckpt['model_state_dict'])
 
-    if torch.cuda.is_available():
-        model = model.cuda()
-
-    # decode
+    # vq encoder-decoder
     configsaycam = load_config(args.vqconfig_path, display=True)
     modelsaycam = load_vqgan(configsaycam, ckpt_path=args.vqmodel_path)
-    modelsaycam = modelsaycam.cuda()
+    if torch.cuda.is_available():
+        model = model.cuda()
+        modelsaycam = modelsaycam.cuda()
 
     if args.condition == 'free':
         # generate some samples unconditionally
@@ -151,6 +150,6 @@ if __name__ == "__main__":
     print('xmodel shape:', xmodel.shape)
 
     if args.condition == "cond":
-        xmodel[:, :, 126, :] = 1
+        xmodel[:, :, 126, :] = 1  # draw a line in the middle of image
 
-    save_image(xmodel, "{}_{}_{}.png".format(args.condition, args.gpt_model, args.seed), nrow=5, padding=1, normalize=True)
+    save_image(xmodel, "{}_{}_{}.png".format(args.condition, args.gpt_model, args.seed), nrow=int(np.sqrt(args.n_samples)), padding=1, normalize=True)

@@ -164,6 +164,7 @@ class ActNorm(nn.Module):
 
         if squeeze:
             h = h.squeeze(-1).squeeze(-1)
+            
         return h
 
 
