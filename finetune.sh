@@ -22,7 +22,7 @@ LR=0.0003
 OPTIMIZER='Adam'
 
 # ####################### SAY #######################
-srun python -u /scratch/eo41/vqgan-gpt/train.py \
+srun python -u /scratch/eo41/vqgan-gpt/finetune.py \
 	--save_dir '/scratch/eo41/vqgan-gpt/gpt_finetuned_models' \
 	--batch_size 6 \
 	--gpt_config 'GPT_gimel' \
@@ -37,7 +37,7 @@ srun python -u /scratch/eo41/vqgan-gpt/train.py \
 	--save_prefix 'say_gimel_konkle'
 
 # # ####################### SFP #######################
-# srun python -u /scratch/eo41/vqgan-gpt/train.py \
+# srun python -u /scratch/eo41/vqgan-gpt/finetune.py \
 # 	--save_dir '/scratch/eo41/vqgan-gpt/gpt_finetuned_models' \
 # 	--batch_size 6 \
 # 	--gpt_config 'GPT_gimel' \
@@ -52,7 +52,7 @@ srun python -u /scratch/eo41/vqgan-gpt/train.py \
 # 	--save_prefix 's_gimel_konkle'
 
 # # # ####################### A #######################
-# srun python -u /scratch/eo41/vqgan-gpt/train.py \
+# srun python -u /scratch/eo41/vqgan-gpt/finetune.py \
 # 	--save_dir '/scratch/eo41/vqgan-gpt/gpt_finetuned_models' \
 # 	--batch_size 6 \
 # 	--gpt_config 'GPT_gimel' \
@@ -67,7 +67,7 @@ srun python -u /scratch/eo41/vqgan-gpt/train.py \
 #  	--save_prefix 'a_gimel_konkle'
 
 # # ####################### Y #######################
-# srun python -u /scratch/eo41/vqgan-gpt/train.py \
+# srun python -u /scratch/eo41/vqgan-gpt/finetune.py \
 # 	--save_dir '/scratch/eo41/vqgan-gpt/gpt_finetuned_models' \
 # 	--batch_size 6 \
 # 	--gpt_config 'GPT_gimel' \
