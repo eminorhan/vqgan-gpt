@@ -20,6 +20,7 @@ parser.add_argument('--num_workers', default=8, type=int, help='number of data l
 parser.add_argument('--seed', default=1, type=int, help='random seed')
 parser.add_argument('--save_dir', default='', type=str, help='model save directory')
 parser.add_argument('--save_prefix', default='model', type=str, help='model save name')
+parser.add_argument('--save_freq', default=10, type=int, help='save checkpoint every this many epochs')
 parser.add_argument('--gpt_config', default='GPT_bet', type=str, help='name of GPT config', choices=['GPT_alef', 'GPT_bet', 'GPT_gimel', 'GPT_dalet'])
 parser.add_argument('--vocab_size', default=8192, type=int, help='vocabulary size')
 parser.add_argument('--block_size', default=1023, type=int, help='context size')
@@ -119,8 +120,8 @@ for epoch in range(args.epochs):
         with torch.no_grad():
             images = preprocess_vqgan(images.cuda(args.gpu))
             _, _, [_, _, indices] = vq_model.encode(images)
-            indices = indices.reshape(args.batch_size, -1)
-            
+            indices = indices.reshape(images.size(0), -1)
+
         # forward prop
         _, loss, _ = model(indices[:, :-1], indices[:, 1:])  # first output returns logits, last one returns unreduced losses
         losses.append(loss.item())
@@ -137,11 +138,12 @@ for epoch in range(args.epochs):
     elapsed_time = end_time - start_time
     print('Epoch:', epoch, '|', 'Training loss:', train_loss, '|', 'Elapsed time:', elapsed_time)
 
-    # save trained model, etc.
-    if args.distributed:
-        if args.rank == 0:
-            save_checkpoint(model, optimizer, train_loss, elapsed_time, epoch, args.save_prefix, args.save_dir)
-    else:
-        save_checkpoint(model, optimizer, train_loss, elapsed_time, epoch, args.save_prefix, args.save_dir)
+    if epoch % args.save_freq == 0:
+        # save trained model, etc.
+        if args.distributed:
+            if args.rank == 0:
+                save_checkpoint(model, optimizer, train_loss, epoch, args.save_prefix, args.save_dir)
+        else:
+            save_checkpoint(model, optimizer, train_loss, epoch, args.save_prefix, args.save_dir)
 
     losses = []

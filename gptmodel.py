@@ -1,10 +1,5 @@
 """
-GPT model:
-- the initial stem consists of a combination of token encoding and a positional encoding
-- the meat of it is a uniform sequence of Transformer blocks
-    - each Transformer is a sequential combination of a 1-hidden-layer MLP block and a self-attention block
-    - all blocks feed into a central residual pathway similar to resnets
-- the final decoder is a linear projection into a vanilla Softmax classifier
+Implements GPT model. The bulk of the code here is based on Andrej Karpathy's minGPT implementation.
 """
 
 import math
@@ -26,13 +21,13 @@ class GPTConfig:
             setattr(self, k, v)
 
 class GPT_alef(GPTConfig):
-    """ Roughly ??M params """
+    """ Roughly 110M params """
     n_layer = 12
     n_head = 12
     n_embd = 768
 
 class GPT_bet(GPTConfig):
-    """ Roughly ??M params """
+    """ Roughly 336M params """
     n_layer = 24
     n_head = 16
     n_embd = 1024
@@ -49,23 +44,8 @@ class GPT_dalet(GPTConfig):
     n_head = 25
     n_embd = 1600
 
-class MeanLayer(torch.nn.Module):
-    def __init__(self, dim, keepdim=False):
-        super(MeanLayer, self).__init__()
-        self.dim = dim
-        self.keepdim = keepdim
-
-    def forward(self, x):
-        out = torch.mean(x, self.dim, self.keepdim)
-        return out
-
 class CausalSelfAttention(nn.Module):
-    """
-    A vanilla multi-head masked self-attention layer with a projection at the end.
-    It is possible to use torch.nn.MultiheadAttention here but I am including an
-    explicit implementation here to show that there is nothing too scary here.
-    """
-
+    """ A vanilla multi-head masked self-attention layer with a projection at the end. """
     def __init__(self, config):
         super().__init__()
 
@@ -87,7 +67,7 @@ class CausalSelfAttention(nn.Module):
         self.register_buffer("mask", torch.tril(torch.ones(config.block_size, config.block_size)).view(1, 1, config.block_size, config.block_size))
         self.n_head = config.n_head
 
-    def forward(self, x, layer_past=None):
+    def forward(self, x):
         B, T, C = x.size()
 
         # calculate query, key, values for all heads in batch and move head forward to be the batch dim
@@ -200,7 +180,7 @@ class LinearProbeGPT(nn.Module):
 
         print('Number of parameters:', sum(p.numel() for p in self.parameters()))
 
-    def forward(self, idx, targets=None):
+    def forward(self, idx):
         _, t = idx.size()
 
         # forward the GPT model
