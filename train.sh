@@ -15,9 +15,6 @@ export MASTER_ADDR=$(hostname -s)
 export MASTER_PORT=$(shuf -i 10000-65500 -n 1)
 export WORLD_SIZE=16
 
-module purge
-module load cuda/11.6.2
-
 LR=0.0003
 OPTIMIZER='Adam'
 

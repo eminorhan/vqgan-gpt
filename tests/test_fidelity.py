@@ -18,8 +18,7 @@ if __name__ == "__main__":
     parser.add_argument('--num_workers', default=4, type=int, help='number of data loading workers (default: 4)')
     parser.add_argument('--n_samples', default=100, type=int, help='number of images to sample')
     parser.add_argument('--save_path', default="/scratch/eo41/vqgan-gpt/tests/saycam_rec_fid", type=str, help='directory to store original and reconstruction images')
-    parser.add_argument('--vq_model', default="say_32x32_8192", type=str, help='VQ model name', choices=['say_32x32_8192', 's_32x32_8192', 'a_32x32_8192', 
-                                                                                                         'y_32x32_8192', 'openimages_32x32_8192', 'imagenet_16x16_16384'])
+    parser.add_argument('--vq_model', default="say_32x32_8192", type=str, help='VQ model name', choices=['say_32x32_8192', 's_32x32_8192', 'a_32x32_8192', 'y_32x32_8192', 'openimages_32x32_8192', 'imagenet_16x16_16384'])
     parser.add_argument('--gumbel', default=False, action='store_true', help='Gumbel VQ?')
 
     args = parser.parse_args()
